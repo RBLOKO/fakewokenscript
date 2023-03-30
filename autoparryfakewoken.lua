@@ -334,7 +334,7 @@ local NoCd = fakewoken:CreateKeybind({
     HoldToInteract = false,
     Flag = "Bind1",
     Callback = function(NoCdBind)
-        for i in pairs(game.workspace.Characters.ahmedfatouh111:GetDescendants()) do
+        for i in pairs(game.workspace.Characters[game.Players.LocalPlayer.Character.Name]:GetDescendants()) do
                 local args = {
                     [1] = "Cancel",
                     [2] = {
@@ -344,7 +344,7 @@ local NoCd = fakewoken:CreateKeybind({
                     }
                 }
                 
-                game:GetService("Players").LocalPlayer.Character:FindFirstChild("stop exploiting, ahmedfatouh111").RemoteEvent:FireServer(unpack(args))
+                game:GetService("Players").LocalPlayer.Character:FindFirstChild("stop exploiting, " .. game.Players.LocalPlayer.Character.Name).RemoteEvent:FireServer(unpack(args))
                 game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:WaitForChild("RollCancel"):Destroy()
                 for i, v in pairs(game.workspace.floor:GetChildren()) do
                     if v.Name == "Attachement" then
