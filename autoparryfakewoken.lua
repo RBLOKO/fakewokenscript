@@ -69,6 +69,9 @@ local char = plr.Character
 local runService = game:GetService("RunService")
 local mouse = plr:GetMouse()
 local UIS = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local goal = {}
+
 _G.aptoggle = false
 _G.m1hold = false
 _G.cancelparry = false
@@ -118,24 +121,16 @@ function m1hold()
             holding = false
         end)
         while holding == true do
-            wait(0.1)
+            wait()
             m1()
         end
     end
 end
 
-function cancelparry()
-    while _G.cancelparry == true do
-        wait(0.2)
-        
-    end
-end
-
 function autoparry()
     while _G.aptoggle == true do
-            wait(0.1)
             char = plr.Character
-            runService.RenderStepped:Wait()
+            wait(0.02)
             for i, plrChar in next, workspace.Characters:GetChildren() do
                 if plrChar ~= char and plrChar:FindFirstChild("Humanoid") and plrChar.Humanoid.Health > 0 and plrChar:FindFirstChild("HumanoidRootPart") and char:FindFirstChild("HumanoidRootPart") then
                     local anims = plrChar.Humanoid:GetPlayingAnimationTracks()
@@ -143,27 +138,30 @@ function autoparry()
                         if table.find(sword, anim.Animation.AnimationId) then
                             if (plrChar.HumanoidRootPart.Position - char.HumanoidRootPart.Position).Magnitude <= 15 then
                                 anim.Stopped:Connect(function()
+                                    if anim.TimePosition == anim.Length then return end
                                     feint = true
                                 end)
                                 wait(0.225)
                                 parry()
-                                wait()
+                                wait(0.1)
                                 feint = false
                             end
                         end
                         if table.find(fist, anim.Animation.AnimationId) then
                             if (plrChar.HumanoidRootPart.Position - char.HumanoidRootPart.Position).Magnitude <= 15 then
                                 anim.Stopped:Connect(function()
+                                    if anim.TimePosition == anim.Length then return end
                                     feint = true
                                 end)
                                 wait(0.10)
-                                parry()
+                                parry() 
                                 feint = false
                             end
                         end
                         if table.find(guns, anim.Animation.AnimationId) then
                             if (plrChar.HumanoidRootPart.Position - char.HumanoidRootPart.Position).Magnitude <= 15 then
                                 anim.Stopped:Connect(function()
+                                    if anim.TimePosition == anim.Length then return end
                                     feint = true
                                 end)
                                 wait(0.075)
@@ -174,7 +172,8 @@ function autoparry()
                         if table.find(dagger, anim.Animation.AnimationId) then
                             if (plrChar.HumanoidRootPart.Position - char.HumanoidRootPart.Position).Magnitude <= 15 then
                                 anim.Stopped:Connect(function()
-                                            feint = true
+                                    if anim.TimePosition == anim.Length then return end
+                                    feint = true
                                 end)
                                 if char:FindFirstChild("GlidedKnife") then
                                     wait(0.075)
@@ -188,6 +187,7 @@ function autoparry()
                         if table.find(battleaxe, anim.Animation.AnimationId) then
                             if (plrChar.HumanoidRootPart.Position - char.HumanoidRootPart.Position).Magnitude <= 20 then
                                 anim.Stopped:Connect(function()
+                                    if anim.TimePosition == anim.Length then return end
                                     feint = true
                                 end)
                                 wait(0.25)
@@ -211,6 +211,7 @@ function autoparry()
                         if table.find(mudskipper, anim.Animation.AnimationId) then
                             if (plrChar.HumanoidRootPart.Position - char.HumanoidRootPart.Position).Magnitude <= 20 then
                                 anim.Stopped:Connect(function()
+                                    if anim.TimePosition == anim.Length then return end
                                     feint = true
                                 end)
                                 wait(0.15)
@@ -222,7 +223,7 @@ function autoparry()
                         -- special
                         if table.find(crits, anim.Animation.AnimationId) then
                             if (plrChar.HumanoidRootPart.Position - char.HumanoidRootPart.Position).Magnitude <= 15 then
-                                wait(0.4)
+                                wait(0.45)
                                 parry()
                                 wait(0.5)
                             end
@@ -230,6 +231,7 @@ function autoparry()
                         if anim.Animation.AnimationId == "rbxassetid://9912709174" then
                             if (plrChar.HumanoidRootPart.Position - char.HumanoidRootPart.Position).Magnitude <= 15 then
                                 anim.Stopped:Connect(function()
+                                    if anim.TimePosition == anim.Length then return end
                                     feint = true
                                 end)
                                 wait(0.25)
@@ -329,28 +331,82 @@ local RollCD = fakewoken:CreateButton({
     })
 
 local NoCd = fakewoken:CreateKeybind({
-    Name = "Press to remove cd from skills",
+    Name = "Press to fart",
     CurrentKeybind = "G",
     HoldToInteract = false,
     Flag = "Bind1",
     Callback = function(NoCdBind)
-        for i in pairs(game.workspace.Characters[game.Players.LocalPlayer.Character.Name]:GetDescendants()) do
+        for i in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
                 local args = {
                     [1] = "Cancel",
                     [2] = {
-                        ["Instance"] = workspace:WaitForChild("floor"),
+                        ["Instance"] = workspace:WaitForChild("Baseplate"),
                         ["Normal"] = Vector3.new(0, 1, 0),
-                        ["Position"] = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - Vector3.new(0, 15, 0)
+                        ["Position"] = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position
                     }
                 }
                 
-                game:GetService("Players").LocalPlayer.Character:FindFirstChild("stop exploiting, " .. game.Players.LocalPlayer.Character.Name).RemoteEvent:FireServer(unpack(args))
-                game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:WaitForChild("RollCancel"):Destroy()
+                game:GetService("Players").LocalPlayer.Character:FindFirstChild("stop exploiting, " .. game.Players.LocalPlayer.Name).RemoteEvent:FireServer(unpack(args))
+                local args = {
+                    [1] = "Dust",
+                    [2] = {
+                        ["Instance"] = workspace:WaitForChild("floor"),
+                        ["Normal"] = Vector3.new(0, 1, 0),
+                        ["Position"] = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position
+                    }
+                }
+                
+                game:GetService("Players").LocalPlayer.Character:FindFirstChild("stop exploiting, " .. game.Players.LocalPlayer.Name).RemoteEvent:FireServer(unpack(args))
                 for i, v in pairs(game.workspace.floor:GetChildren()) do
                     if v.Name == "Attachement" then
                        v:Destroy() 
                     end
                 end
+        end
+    end
+})
+
+local AppleFarm = fakewoken:CreateKeybind({
+    Name = "Press to farm apples in your ps",
+    CurrentKeybind = "KeypadTwo",
+    HoldToInteract = false,
+    Flag = "Bind1",
+    Callback = function(AppleFarm)
+        goal.CFrame = game:GetService("Workspace").Characters.MysteriousApple.HumanoidRootPart.CFrame
+        local tween = TweenService:Create(char.HumanoidRootPart, TweenInfo.new(10), goal)
+        tween:Play()
+    end
+})
+
+local MoreSize = fakewoken:CreateSlider({
+    Name = "Increase speed of your anims",
+    Range = {0, 1},
+    Increment = 0.1,
+    Suffix = "Speed",
+    CurrentValue = 0,
+    Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(SizeValue)
+        while true do
+            char = plr.Character
+            local anims = char.Humanoid:GetPlayingAnimationTracks()
+            for _, anim in next, anims do
+                if table.find(sword, anim.Animation.AnimationId) then
+                    anim:AdjustSpeed(SizeValue)
+                end
+                if table.find(fist, anim.Animation.AnimationId) then
+                    anim:AdjustSpeed(SizeValue)
+                end
+                if table.find(guns, anim.Animation.AnimationId) then
+                    anim:AdjustSpeed(SizeValue)
+                end
+                if table.find(dagger, anim.Animation.AnimationId) then
+                    anim:AdjustSpeed(SizeValue)
+                end
+                if table.find(battleaxe, anim.Animation.AnimationId) then
+                    anim:AdjustSpeed(SizeValue)
+                end
+            end
+            wait(0.1)
         end
     end
 })
